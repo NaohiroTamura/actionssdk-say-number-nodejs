@@ -17,6 +17,8 @@
 const functions = require('firebase-functions');
 const {actionssdk} = require('actions-on-google');
 
+const faasshell = require('./commit-count-report.js');
+
 const app = actionssdk({debug: true});
 
 app.intent('actions.intent.MAIN', (conv) => {
@@ -25,12 +27,20 @@ app.intent('actions.intent.MAIN', (conv) => {
     '<say-as interpret-as="ordinal">123</say-as>. Say a number.</speak>');
 });
 
+
 app.intent('actions.intent.TEXT', (conv, input) => {
   if (input === 'bye') {
     return conv.close('Goodbye!');
   }
-  conv.ask('<speak>You said, ' +
-    `<say-as interpret-as="ordinal">${input}</say-as></speak>`);
+  return faasshell.commit_count_report().then(([res, body]) => {
+    conv.ask('<speak>You said, ' +
+             `<say-as interpret-as="ordinal">${input}</say-as></speak>`);
+    const report = JSON.parse(body).output.github.output.values[0];
+    conv.ask('commit count report returned '
+             + report[0] + ' contributed '
+             + report[5].toString() + ' commits to '
+             + report[2] + ' repository.')
+  });
 });
 
 exports.webhook = functions.https.onRequest(app);

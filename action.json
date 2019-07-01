@@ -9,6 +9,31 @@
       "intent": {
         "name": "actions.intent.MAIN"
       }
+    },
+    {
+      "name": "com.fujitsu.commands.CommitCountReport",
+      "fulfillment": {
+        "conversationName": "conversation_1"
+      },
+      "intent": {
+          "name": "com.fujitsu.commands.CommitCountReport",
+          "parameters": [
+              {
+                  "name": "from",
+                  "type": "org.schema.type.Date"
+              },
+              {
+                  "name": "to",
+                  "type": "org.schema.type.Date"
+              }
+          ],
+          "trigger": {
+              "queryPatterns": [
+                  "query faasshell from $org.schema.type.Date:from (to $org.schema.type.Date:to)?",
+                  "query github"
+              ]
+          }
+      }
     }
   ],
   "conversations": {
