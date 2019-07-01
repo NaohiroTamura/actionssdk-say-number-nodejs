@@ -14,7 +14,7 @@
   "conversations": {
     "conversation_1": {
       "name": "conversation_1",
-      "url": "YOUR_ENDPOINT_URL",
+      "url": "https://us-central1-mydialogflow-ef93e.cloudfunctions.net/webhook",
       "fulfillmentApiVersion": 2
     }
   }
